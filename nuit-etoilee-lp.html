@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuit Étoilée（ニュイ・テトワレ）| 名古屋市中区 完全予約制ダイニングバー</title>
+<style>
+  :root{
+    --black: #0b0b0b;
+    --navy: #111827;
+    --gold: #c9a96e;
+    --gold-soft: #e3cd9e;
+    --off-white: #f9f9f9;
+    --off-white-dim: rgba(249,249,249,0.62);
+    --off-white-faint: rgba(249,249,249,0.38);
+    --line: rgba(201,169,110,0.28);
+    --serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; background: var(--black); }
+  body{
+    background: var(--black);
+    color: var(--off-white);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== 気配の光（シグネチャー要素） ===== */
+  .ambient{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .ambient::before{
+    content:"";
+    position:absolute;
+    top: -10%;
+    right: -20%;
+    width: 70vmax;
+    height: 70vmax;
+    background: radial-gradient(circle, rgba(201,169,110,0.10) 0%, rgba(201,169,110,0.04) 35%, transparent 70%);
+    filter: blur(10px);
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  .ambient::after{
+    content:"";
+    position:absolute;
+    bottom: -15%;
+    left: -25%;
+    width: 60vmax;
+    height: 60vmax;
+    background: radial-gradient(circle, rgba(201,169,110,0.07) 0%, transparent 65%);
+    filter: blur(10px);
+    animation: drift2 28s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    from{ transform: translate(0,0) scale(1); opacity:.7; }
+    to{ transform: translate(-6%, 8%) scale(1.12); opacity:1; }
+  }
+  @keyframes drift2{
+    from{ transform: translate(0,0) scale(1); opacity:.5; }
+    to{ transform: translate(8%, -6%) scale(1.08); opacity:.85; }
+  }
+
+  main{ position: relative; z-index: 1; }
+
+  .container{
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ===== タイポグラフィ基本 ===== */
+  .eyebrow{
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  h1, h2, h3{
+    font-family: var(--serif);
+    font-weight: 500;
+    color: var(--off-white);
+    letter-spacing: 0.04em;
+  }
+  p{ color: var(--off-white-dim); font-weight: 300; }
+
+  .divider{
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 0 auto;
+    opacity: 0.6;
+  }
+  .divider.short{ height: 32px; }
+
+  /* ===== ヘッダー（簡易） ===== */
+  .topbar{
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index: 50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 18px 0;
+    background: linear-gradient(to bottom, rgba(11,11,11,0.85), transparent);
+  }
+  .topbar .brand{
+    font-family: var(--serif);
+    font-size: 13px;
+    letter-spacing: 0.38em;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+  }
+
+  /* ===== ファーストビュー ===== */
+  .hero{
+    min-height: 100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 120px 28px 80px;
+    position: relative;
+  }
+  .hero .eyebrow{ margin-bottom: 22px; }
+  .hero h1{
+    font-size: clamp(28px, 7vw, 38px);
+    line-height: 1.6;
+    letter-spacing: 0.06em;
+  }
+  .hero h1 .gold{ color: var(--gold-soft); }
+  .hero .lead{
+    margin-top: 28px;
+    font-size: 14.5px;
+    color: var(--off-white-dim);
+    line-height: 2;
+  }
+  .hero .lead .br{ display:block; }
+
+  .scroll-hint{
+    position:absolute;
+    bottom: 36px; left:50%;
+    transform: translateX(-50%);
+    width:1px; height: 46px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  .scroll-hint::after{
+    content:"";
+    position:absolute;
+    top:0; left:-2px;
+    width:5px; height:5px;
+    border-radius:50%;
+    background: var(--gold);
+    animation: fall 2.4s ease-in-out infinite;
+  }
+  @keyframes fall{
+    0%{ top:0; opacity:0; }
+    20%{ opacity:1; }
+    80%{ opacity:1; }
+    100%{ top: 42px; opacity:0; }
+  }
+
+  /* ===== CTA ===== */
+  .cta-group{
+    margin-top: 44px;
+    display:flex;
+    flex-direction:column;
+    gap: 14px;
+    width: 100%;
+    max-width: 320px;
+  }
+  .btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    padding: 17px 20px;
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-decoration:none;
+    border-radius: 2px;
+    transition: all .35s ease;
+    white-space: nowrap;
+  }
+  .btn-primary{
+    background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+    color: var(--black);
+    font-weight: 500;
+    box-shadow: 0 8px 24px -8px rgba(201,169,110,0.45);
+  }
+  .btn-primary:hover{ filter: brightness(1.08); transform: translateY(-1px); }
+  .btn-secondary{
+    background: transparent;
+    color: var(--off-white-dim);
+    border: 1px solid var(--line);
+    font-weight: 300;
+  }
+  .btn-secondary:hover{ border-color: var(--gold); color: var(--off-white); }
+
+  /* ===== セクション共通 ===== */
+  section{
+    padding: 96px 0;
+    position: relative;
+  }
+  .section-inner{ text-align:center; }
+  .section-inner .eyebrow{ display:block; margin-bottom: 18px; }
+  .section-inner h2{
+    font-size: clamp(22px, 6vw, 27px);
+    line-height: 1.7;
+    margin-bottom: 26px;
+  }
+  .section-inner p{
+    font-size: 14px;
+    line-height: 2.1;
+  }
+  .section-inner p + p{ margin-top: 18px; }
+
+  /* ===== 共感セクション ===== */
+  .empathy{ background: var(--black); }
+
+  /* ===== コンセプトセクション ===== */
+  .concept{
+    background: linear-gradient(180deg, var(--black) 0%, var(--navy) 100%);
+  }
+  .concept h2{ color: var(--gold-soft); }
+
+  /* ===== 体験価値 ===== */
+  .benefits{ background: var(--navy); }
+  .benefit-list{
+    margin-top: 40px;
+    display:flex;
+    flex-direction:column;
+    gap: 28px;
+    text-align:left;
+  }
+  .benefit-item{
+    display:flex;
+    gap: 18px;
+    align-items:flex-start;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .benefit-item:last-child{ border-bottom:none; padding-bottom:0; }
+  .benefit-mark{
+    flex-shrink:0;
+    width: 6px; height:6px;
+    border-radius:50%;
+    background: var(--gold);
+    margin-top: 10px;
+    box-shadow: 0 0 10px 1px rgba(201,169,110,0.5);
+  }
+  .benefit-text h3{
+    font-size: 15.5px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .benefit-text p{ font-size: 13.5px; line-height: 1.95; }
+  .benefits .closing-line{
+    margin-top: 40px;
+    font-size: 13.5px;
+    font-style: normal;
+    color: var(--off-white-faint);
+    line-height: 2.1;
+  }
+
+  /* ===== VIPルーム（最重要） ===== */
+  .vip{
+    background: var(--black);
+    position: relative;
+  }
+  .vip-frame{
+    border: 1px solid var(--line);
+    padding: 56px 28px;
+    position: relative;
+  }
+  .vip-frame::before, .vip-frame::after{
+    content:"";
+    position:absolute;
+    width: 18px; height: 18px;
+    border: 1px solid var(--gold);
+  }
+  .vip-frame::before{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+  .vip-frame::after{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
+  .vip .eyebrow{ color: var(--gold-soft); }
+  .vip h2{ font-size: clamp(22px, 6.4vw, 28px); margin-bottom: 28px; }
+  .vip-badge{
+    display:inline-block;
+    margin-top: 30px;
+    padding: 10px 22px;
+    border: 1px solid var(--gold);
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    color: var(--gold-soft);
+  }
+  .vip-note{
+    margin-top: 26px;
+    font-size: 12px;
+    color: var(--off-white-faint);
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== 限定性・緊急性 ===== */
+  .scarcity{
+    background: var(--navy);
+    text-align:center;
+  }
+  .scarcity-stats{
+    display:flex;
+    justify-content:center;
+    gap: 18px;
+    margin: 38px 0 34px;
+  }
+  .stat{
+    flex:1;
+    max-width: 150px;
+    padding: 22px 10px;
+    border: 1px solid var(--line);
+  }
+  .stat .num{
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--gold-soft);
+    display:block;
+  }
+  .stat .label{
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--off-white-faint);
+    margin-top: 8px;
+    display:block;
+  }
+  .scarcity .punch{
+    font-size: 14.5px;
+    line-height: 2.1;
+    color: var(--off-white);
+  }
+  .scarcity .punch .gold{ color: var(--gold-soft); }
+
+  /* ===== クロージング ===== */
+  .closing{
+    background: linear-gradient(180deg, var(--navy) 0%, var(--black) 100%);
+    text-align:center;
+  }
+  .closing h2{
+    font-size: clamp(23px, 6.5vw, 30px);
+    line-height: 1.85;
+  }
+  .closing .signoff{
+    margin-top: 34px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--gold-soft);
+  }
+
+  /* ===== 最終CTA／予約導線 ===== */
+  .reserve{
+    background: var(--black);
+    padding-bottom: 64px;
+  }
+  .reserve .section-inner > .eyebrow{ margin-bottom: 16px; }
+  .reserve h2{ margin-bottom: 12px; }
+  .reserve .sub{ font-size: 13px; color: var(--off-white-faint); margin-bottom: 36px; }
+
+  .reserve-card{
+    border: 1px solid var(--line);
+    padding: 30px 24px;
+    text-align:left;
+    margin-bottom: 16px;
+  }
+  .reserve-card .rc-label{
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform:uppercase;
+  }
+  .reserve-card .rc-value{
+    font-family: var(--serif);
+    font-size: 19px;
+    color: var(--off-white);
+    margin-top: 8px;
+  }
+  .reserve-card .rc-note{
+    font-size: 12px;
+    color: var(--off-white-faint);
+    margin-top: 6px;
+  }
+  .reserve-card a{ color: inherit; text-decoration:none; }
+
+  .reserve .btn-primary, .reserve .btn-secondary{ width:100%; }
+  .reserve .cta-stack{
+    display:flex; flex-direction:column; gap:14px; margin-top: 28px;
+  }
+
+  /* ===== フッター ===== */
+  footer{
+    padding: 40px 28px 50px;
+    text-align:center;
+    border-top: 1px solid var(--line);
+  }
+  footer .fname{
+    font-family: var(--serif);
+    font-size: 15px;
+    letter-spacing: 0.3em;
+    color: var(--gold-soft);
+  }
+  footer .faddr{
+    margin-top: 14px;
+    font-size: 11.5px;
+    color: var(--off-white-faint);
+    line-height: 1.9;
+  }
+
+  /* ===== スクロールフェードイン ===== */
+  .fade-up{
+    opacity: 0.001;
+    transform: translateY(14px);
+    transition: opacity 1s ease, transform 1s ease;
+    animation: fadeup-fallback 0s 1.6s forwards;
+  }
+  .fade-up.in{ opacity:1; transform: translateY(0); }
+  @keyframes fadeup-fallback{ to{ opacity: 1; transform: none; } }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+    .fade-up{ opacity:1; transform:none; }
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline: 1px solid var(--gold);
+    outline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<header class="topbar">
+  <span class="brand">Nuit Étoilée</span>
+</header>
+
+<main>
+
+  <!-- ① ファーストビュー -->
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">NAGOYA · NAKA-KU / 完全予約制</span>
+      <h1>その夜景は、<br><span class="gold">選ばれた人</span>だけが<br>知っている。</h1>
+      <p class="lead">
+        <span class="br">名古屋・中区。喧騒の先にある、静寂と光の空間。</span>
+        <span class="br">ここで過ごす時間は、ただの「食事」では終わらない。</span>
+      </p>
+      <div class="cta-group">
+        <a href="tel:0000000000" class="btn btn-primary">電話で今夜の席を確保する</a>
+        <a href="#reserve" class="btn btn-secondary">特別な夜を予約する</a>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"></div>
+  </section>
+
+  <!-- ② 共感・問題提起 -->
+  <section class="empathy">
+    <div class="container section-inner fade-up">
+      <span class="eyebrow">TO YOU, WHO CHOOSES CAREFULLY</span>
+      <h2>「デートで、<br>絶対に失敗したくない」</h2>
+      <p>そう思ったことは、ありませんか。</p>
+      <p>店選びひとつで、<br>その日の印象はすべて決まります。</p>
+      <p>だからこそ——<br>「間違いのない選択」が必要です。</p>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider fade-up"></div></div>
+
+  <!-- ③ 解決（コンセプト提示） -->
+  <section class="concept">
+    <div class="container section-inner fade-up">
+      <span class="eyebrow">CONCEPT</span>
+      <h2>ニュイ・テトワレは、<br>ただのダイニングバーでは<br>ありません。</h2>
+      <p>訪れた人だけが知る、<br>「夜景と時間」を味わう場所。</p>
+      <p>扉を開けた瞬間から、<br>日常は静かに消えていきます。</p>
+    </div>
+  </section>
+
+  <!-- ④ 体験価値 -->
+  <section class="benefits">
+    <div class="container section-inner fade-up">
+      <span class="eyebrow">EXPERIENCE</span>
+      <h2>言葉より先に、<br>空気が変わる。</h2>
+
+      <div class="benefit-list">
+        <div class="benefit-item">
+          <span class="benefit-mark" aria-hidden="true"></span>
+          <div class="benefit-text">
+            <h3>目の前に広がる、圧倒的な夜景</h3>
+            <p>窓際の席から望む光は、写真では伝えられません。だからこそ、ここでは見せずにお迎えします。</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-mark" aria-hidden="true"></span>
+          <div class="benefit-text">
+            <h3>静かに流れる、大人の時間</h3>
+            <p>急かされることのない一夜。グラスを傾けるたび、時間の流れがゆるやかになっていきます。</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-mark" aria-hidden="true"></span>
+          <div class="benefit-text">
+            <h3>会話が自然と深くなる空間設計</h3>
+            <p>照明、距離、音。すべてが「二人の時間」のために計算されています。</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="closing-line">ここでは、無理に盛り上げる必要はありません。<br>ただ「そこにいるだけ」で、成立する夜があります。</p>
+    </div>
+  </section>
+
+  <!-- ⑤ VIPルーム訴求（最重要） -->
+  <section class="vip">
+    <div class="container fade-up">
+      <div class="vip-frame section-inner">
+        <span class="eyebrow">VIP ROOM</span>
+        <h2>選ばれた人だけが<br>入れる、特別室。</h2>
+        <p>限られた席数のみ用意された、VIPルーム。</p>
+        <p>完全個室の空間から望む夜景は、<br>他では決して味わえないもの。</p>
+        <p>大切な記念日や、<br>忘れられない一日に。</p>
+        <span class="vip-badge">完全個室 · 数量限定</span>
+        <p class="vip-note">※ご予約はお早めに。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ 限定性・緊急性 -->
+  <section class="scarcity">
+    <div class="container section-inner fade-up">
+      <span class="eyebrow">RESERVATION</span>
+      <h2>「いつでも行ける場所」<br>ではありません。</h2>
+
+      <div class="scarcity-stats">
+        <div class="stat">
+          <span class="num">10</span>
+          <span class="label">1日限定組数</span>
+        </div>
+        <div class="stat">
+          <span class="num">1</span>
+          <span class="label">VIPルーム</span>
+        </div>
+      </div>
+
+      <p class="punch">
+        1日10組限定。<br>
+        週末はすぐに<span class="gold">満席</span>となります。<br><br>
+        「いつでも行ける場所」ではなく、<br>
+        「<span class="gold">選ばれた日</span>にだけ行ける場所」です。
+      </p>
+    </div>
+  </section>
+
+  <!-- ⑦ クロージング -->
+  <section class="closing">
+    <div class="container section-inner fade-up">
+      <h2>その夜が、<br>これからの関係を<br>変えるかもしれない。</h2>
+      <p style="margin-top:30px;">だからこそ、<br>場所選びに妥協はしないでください。</p>
+      <p class="signoff">ニュイ・テトワレで、記憶に残る一夜を。</p>
+    </div>
+  </section>
+
+  <!-- ⑧ CTA（予約導線） -->
+  <section class="reserve" id="reserve">
+    <div class="container section-inner fade-up">
+      <span class="eyebrow">RESERVE YOUR NIGHT</span>
+      <h2>今夜、空席を<br>確かめる。</h2>
+      <p class="sub">電話・メールにて承っております。</p>
+
+      <div class="reserve-card">
+        <div class="rc-label">Tel</div>
+        <div class="rc-value"><a href="tel:0000000000">052-000-0000</a></div>
+        <div class="rc-note">受付 17:00–23:00（不定休）</div>
+      </div>
+
+      <div class="reserve-card">
+        <div class="rc-label">Mail</div>
+        <div class="rc-value"><a href="mailto:reserve@nuit-etoilee.example">reserve@nuit-etoilee.example</a></div>
+        <div class="rc-note">24時間受付・折り返しご連絡いたします</div>
+      </div>
+
+      <div class="cta-stack">
+        <a href="tel:0000000000" class="btn btn-primary">今すぐ予約する（電話）</a>
+        <a href="mailto:reserve@nuit-etoilee.example" class="btn btn-secondary">空席を問い合わせる（メール）</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="fname">NUIT ÉTOILÉE</div>
+  <div class="faddr">
+    愛知県名古屋市中区　※詳細はご予約時にご案内いたします<br>
+    完全予約制 ダイニングバー
+  </div>
+</footer>
+
+<script>
+  // スクロールフェードイン
+  const items = document.querySelectorAll('.fade-up');
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.18 });
+    items.forEach(el=> io.observe(el));
+  } else {
+    items.forEach(el=> el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
